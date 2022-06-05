@@ -26,7 +26,7 @@
     "_prefab": null,
     "autoReleaseAssets": false,
     "_globals": {
-      "__id__": 37
+      "__id__": 38
     },
     "_id": "5e5cc5ef-edb4-4e93-944e-bb5af12cc027"
   },
@@ -148,6 +148,9 @@
       },
       {
         "__id__": 36
+      },
+      {
+        "__id__": 37
       }
     ],
     "_prefab": null,
@@ -673,6 +676,10 @@
       {
         "__uuid__": "5045340e-47c3-40ab-8d2a-7ce26b8f6b19",
         "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "d848f6f2-0568-42cb-9845-cb33601e15a7",
+        "__expectedType__": "cc.AnimationClip"
       }
     ],
     "_defaultClip": {
@@ -1169,7 +1176,7 @@
     },
     "_type": 0,
     "_fillType": 0,
-    "_sizeMode": 1,
+    "_sizeMode": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
       "x": 0,
@@ -1274,21 +1281,33 @@
     "_id": "bfdL0hIzJHtquXtuDy6r+w"
   },
   {
+    "__type__": "7271cu+dBJAEqvH0tyJqRuy",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 4
+    },
+    "_enabled": true,
+    "__prefab": null,
+    "handsNode": null,
+    "_id": "5127ffhjdMXoxggl5/XwLR"
+  },
+  {
     "__type__": "cc.SceneGlobals",
     "ambient": {
-      "__id__": 38
-    },
-    "shadows": {
       "__id__": 39
     },
-    "_skybox": {
+    "shadows": {
       "__id__": 40
     },
-    "fog": {
+    "_skybox": {
       "__id__": 41
     },
-    "octree": {
+    "fog": {
       "__id__": 42
+    },
+    "octree": {
+      "__id__": 43
     }
   },
   {

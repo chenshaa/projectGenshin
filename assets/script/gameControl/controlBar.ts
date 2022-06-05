@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, game, director, EventTouch, EventKeyboard, input, Input } from 'cc';
+import { _decorator, Component, Node, game, director, EventTouch, EventKeyboard, input, Input, Script, Scene } from 'cc';
 const { ccclass, property } = _decorator;
 
 /**
@@ -31,9 +31,11 @@ export class controlBar extends Component {
     @property
     private inputDely: number = 50;
 
+    private sceneList=['packingPests'];
+
+
     //输入类型，0为无输入。1为A，2为B，3为AB
     private inputType: number = 0;
-    private that = this;
 
     start() {
         //设置顶层节点
@@ -53,7 +55,11 @@ export class controlBar extends Component {
         input.on(Input.EventType.KEY_UP, this.keyInputEnd, this);
 
         //转入初始场景
-        director.loadScene("PackingPests");
+        director.loadScene("packingPests");
+    }
+
+    gamrDirector(){
+
     }
 
     leftTouchPanelStart(e: EventTouch) {
@@ -123,6 +129,8 @@ export class controlBar extends Component {
 
     inputLeft() {
         console.log("left");
+        this.node.emit('systemClickLeft');
+        //getComponent('packingPests');
     }
 
     inputRight() {
