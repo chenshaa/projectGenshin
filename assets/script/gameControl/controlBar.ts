@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, game, find, director, log, EventTouch } from 'cc';
+import { _decorator, Component, Node, game, director, EventTouch, EventKeyboard, input, Input } from 'cc';
 const { ccclass, property } = _decorator;
 
 /**
@@ -22,26 +22,121 @@ export class controlBar extends Component {
     // [2]
     // @property
     // serializableDummy = 0;
+    @property(Node)
+    private leftTouchPanel: Node = null;
+
+    @property(Node)
+    private rightTouchPanel: Node = null;
+
+    @property
+    private inputDely: number = 50;
+
+    //输入类型，0为无输入。1为A，2为B，3为AB
+    private inputType: number = 0;
+    private that = this;
 
     start() {
-
         //设置顶层节点
         game.addPersistRootNode(this.node);
-        director.loadScene("PackingPests");
 
         //添加游戏需要的按键、触控监听
-        this.node.on(Node.EventType.TOUCH_START, this.touchStartInput,this);
-        this.node.on(Node.EventType.TOUCH_END, this.touchEndInput,this);
-        this.node.on(Node.EventType.TOUCH_CANCEL, this.touchEndInput,this);
+        //左控制面板
+        this.leftTouchPanel.on(Node.EventType.TOUCH_START, this.leftTouchPanelStart, this);
+        this.leftTouchPanel.on(Node.EventType.TOUCH_END, this.leftTouchPanelEnd, this);
+        this.leftTouchPanel.on(Node.EventType.TOUCH_CANCEL, this.leftTouchPanelEnd, this);
+        //右控制面板
+        this.rightTouchPanel.on(Node.EventType.TOUCH_START, this.rightTouchPanelStart, this);
+        this.rightTouchPanel.on(Node.EventType.TOUCH_END, this.rightTouchPanelEnd, this);
+        this.rightTouchPanel.on(Node.EventType.TOUCH_CANCEL, this.rightTouchPanelEnd, this);
+        //按键
+        input.on(Input.EventType.KEY_DOWN, this.keyInputStart, this);
+        input.on(Input.EventType.KEY_UP, this.keyInputEnd, this);
+
+        //转入初始场景
+        director.loadScene("PackingPests");
     }
 
-    touchStartInput(e: EventTouch) {
-        log("点击id：" + e.getID());
+    leftTouchPanelStart(e: EventTouch) {
+        console.log("touch");
     }
 
-    touchEndInput(e: EventTouch) {
-        log("结束id：" + e.getID());
+    leftTouchPanelEnd(e: EventTouch) {
+
     }
+
+    rightTouchPanelStart(e: EventTouch) {
+
+    }
+
+    rightTouchPanelEnd(e: EventTouch) {
+
+    }
+
+    keyInputStart(e: EventKeyboard) {
+        switch (e.keyCode) {
+            case 37:
+                //左方向
+                if (this.inputType == 0) {
+                    this.inputType = 1;
+                    setTimeout(() => {
+                        if (this.inputType == 1) {
+                            //没有伴随按键
+                            this.inputType = 0;
+                            this.inputLeft();
+                        }
+                    }, this.inputDely);
+
+                }else if(this.inputType == 2){
+                    //存在right伴随
+                    this.inputType = 3;
+                    this.inputDoubleStart();
+                }
+                break;
+            case 39:
+                //右方向
+                if (this.inputType == 0) {
+                    this.inputType = 2;
+                    setTimeout(() => {
+                        if (this.inputType == 2) {
+                            //没有伴随按键
+                            this.inputType = 0;
+                            this.inputRight();
+                        }
+                    }, this.inputDely);
+
+                } else if (this.inputType == 1) {
+                    //存在left伴随
+                    this.inputType = 3;
+                    this.inputDoubleStart();
+
+                }
+                break;
+        }
+    }
+
+    keyInputEnd(e: EventKeyboard) {
+        if(this.inputType==3){
+            this.inputType=0;
+            this.inputDoubleEnd();
+        }
+    }
+
+    inputLeft() {
+        console.log("left");
+    }
+
+    inputRight() {
+        console.log("righr");
+    }
+
+    inputDoubleStart() {
+        console.log("double");
+    }
+
+    inputDoubleEnd() {
+        console.log("doubleEnd");
+    }
+
 
     // update (deltaTime: number) {
     //     // [4]
