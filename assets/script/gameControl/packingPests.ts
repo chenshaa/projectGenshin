@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Animation } from 'cc';
+import { _decorator, Component, Node, Animation, director } from 'cc';
 const { ccclass, property } = _decorator;
 
 /**
@@ -13,36 +13,76 @@ const { ccclass, property } = _decorator;
  * ManualUrl = https://docs.cocos.com/creator/3.4/manual/zh/
  *
  */
- 
+
 @ccclass('packingPests')
-export class packingPests extends Component {
+export default class packingPests extends Component {
     // [1]
     // dummy = '';
 
     // [2]
     // @property
     // serializableDummy = 0;
+
     @property(Node)
-    handsNode :Node= null;
+    handsNode: Node = null;
 
-    handsAnim :Animation= null;
+    @property(Node)
+    goodsNode: Node = null;
 
-    start () {
+    private handsAnim: Animation = null;
+    private goodsAnim: Animation = null;
+
+    static _instance: packingPests;
+
+    private waitForInput:number=null;
+
+    start() {
         // [3]
-        this.handsAnim=this.handsNode.getComponent(Animation);
-        console.log(this.handsAnim);
+        packingPests._instance = this;
 
-        this.node.on('systemClickLeft',this.systemClickLeft,this);
+        this.handsAnim = this.handsNode.getComponent(Animation);
+        this.goodsAnim = this.goodsNode.getComponent(Animation);
     }
 
+    /**
+     * 当前脚本运行实例
+     * @returns {packingPests}
+     */
+    static get ins() {
+        return packingPests._instance
+    }
+
+    systemClickLeft() {
+        //console.log(this.handsAnim);
+        this.handsAnim.play('handsAccept');
+        if(this.waitForInput!=null){
+            //存在等待按键
+            clearTimeout(this.waitForInput);
+            this.waitForInput=null;
+            this.goodsAnim.play("fishAccept");
+        }
+    }  
+
+    sysEmit(type: number, inf?: number) {
+        switch (type) {
+            case 1:
+                this.goodsAnim.play("fishDefault");
+                setTimeout(this.judiceInput,inf);
+                break;
+        }
+    }
+
+    judiceInput(){
+        this.waitForInput=setTimeout(()=>{
+            console.log("miss");
+        },50);
+    }
+
+    
     // update (deltaTime: number) {
     //     // [4]
     // }
 
-    systemClickLeft(){
-        console.log("clickLeft");
-        this.handsAnim.play('handsAccept');
-    }
 }
 
 /**

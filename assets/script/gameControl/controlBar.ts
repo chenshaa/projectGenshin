@@ -1,4 +1,4 @@
-
+import packingPests from './packingPests';
 import { _decorator, Component, Node, game, director, EventTouch, EventKeyboard, input, Input, Script, Scene } from 'cc';
 const { ccclass, property } = _decorator;
 
@@ -16,12 +16,7 @@ const { ccclass, property } = _decorator;
 
 @ccclass('controlBar')
 export class controlBar extends Component {
-    // [1]
-    // dummy = '';
 
-    // [2]
-    // @property
-    // serializableDummy = 0;
     @property(Node)
     private leftTouchPanel: Node = null;
 
@@ -31,11 +26,11 @@ export class controlBar extends Component {
     @property
     private inputDely: number = 50;
 
-    private sceneList=['packingPests'];
-
-
     //输入类型，0为无输入。1为A，2为B，3为AB
     private inputType: number = 0;
+
+    //系统计时器
+    public systemTime:number =0;
 
     start() {
         //设置顶层节点
@@ -54,11 +49,17 @@ export class controlBar extends Component {
         input.on(Input.EventType.KEY_DOWN, this.keyInputStart, this);
         input.on(Input.EventType.KEY_UP, this.keyInputEnd, this);
 
-        //转入初始场景
-        director.loadScene("packingPests");
+        //开始游戏
+        this.gamrDirector();
     }
 
-    gamrDirector(){
+    gamrDirector() {
+
+        director.loadScene("packingPests");
+
+        setTimeout(()=>{
+            packingPests.ins.sysEmit(1,20);
+        },6600);
 
     }
 
@@ -92,7 +93,7 @@ export class controlBar extends Component {
                         }
                     }, this.inputDely);
 
-                }else if(this.inputType == 2){
+                } else if (this.inputType == 2) {
                     //存在right伴随
                     this.inputType = 3;
                     this.inputDoubleStart();
@@ -114,22 +115,22 @@ export class controlBar extends Component {
                     //存在left伴随
                     this.inputType = 3;
                     this.inputDoubleStart();
-
                 }
                 break;
         }
     }
 
     keyInputEnd(e: EventKeyboard) {
-        if(this.inputType==3){
-            this.inputType=0;
+        if (this.inputType == 3) {
+            this.inputType = 0;
             this.inputDoubleEnd();
         }
     }
 
     inputLeft() {
         console.log("left");
-        this.node.emit('systemClickLeft');
+        //this.node.emit('systemClickLeft');
+        packingPests.ins.systemClickLeft();
         //getComponent('packingPests');
     }
 

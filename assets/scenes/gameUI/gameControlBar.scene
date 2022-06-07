@@ -116,7 +116,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Canvas",
+    "_name": "gameControlBar",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1
@@ -488,7 +488,7 @@
       "__expectedType__": "cc.AudioClip"
     },
     "_loop": false,
-    "_playOnAwake": true,
+    "_playOnAwake": false,
     "_volume": 1,
     "_id": "67N/ideq1A35hkqgxyyEcY"
   },

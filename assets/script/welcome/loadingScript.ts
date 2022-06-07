@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, resources, Texture2D, director } from 'cc';
+import { _decorator, Component, Node, resources, Texture2D, director, Label, ProgressBar } from 'cc';
 const { ccclass, property } = _decorator;
 
 /**
@@ -23,37 +23,51 @@ export class loadingScript extends Component {
     // @property
     // serializableDummy = 0;
 
+    @property(Label)
+    textLabel: Label = null;
+
+    @property(ProgressBar)
+    progressBar: ProgressBar = null;
+
     start() {
-        //预加载
-        resources.preloadDir('texture',Texture2D,(err, textures) => {console.log(textures)});
+        //预加载资源
+        resources.preloadDir('', (finished: number, total: number, item) => {
+            this.progressBar.progress = finished / total;
+            //console.log(item.info);
+            // @ts-ignore
+            this.textLabel.string = "正在加载：" + item.info.path;
+        }, (err, item) => { this.preloadSceneBegin() });
+    }
 
-        let sceneList = ['PackingPests'];
+    preloadSceneBegin() {
+        //预加载场景
+        let sceneList = ['gameControlBar', 'PackingPests'];
         this.preloadScene(sceneList, 0);
-
-        this.node.on(Node.EventType.TOUCH_START,this.loadClick,this);
     }
 
     preloadScene(sceneList, count) {
-        if (count > sceneList.length) {
+        if (count >= sceneList.length) {
             this.loadComplete();
             return;
         }
+        this.progressBar.progress = sceneList.length / count;
+        this.textLabel.string = "正在加载：scene/" + sceneList[count];
 
         resources.preloadScene(sceneList[count], (finished: number, total: number, item) => {
             console.log(finished);
         }, (err) => {
             this.preloadScene(sceneList, count + 1);
         });
-
     }
 
     loadComplete() {
         //加载完成
-        //引入controlBar
-        //director.loadScene('gameControlBar');
+        //开始监听点击事件
+        this.node.on(Node.EventType.TOUCH_START, this.loadClick, this);
+        this.textLabel.string = "点击进入游戏";
     }
 
-    loadClick(){
+    loadClick() {
         director.loadScene('gameControlBar');
     }
 
