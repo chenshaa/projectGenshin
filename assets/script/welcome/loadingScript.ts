@@ -50,7 +50,7 @@ export class loadingScript extends Component {
             this.loadComplete();
             return;
         }
-        this.progressBar.progress = sceneList.length / count;
+        this.progressBar.progress = sceneList.length / (count + 1);
         this.textLabel.string = "正在加载：scene/" + sceneList[count];
 
         resources.preloadScene(sceneList[count], (finished: number, total: number, item) => {

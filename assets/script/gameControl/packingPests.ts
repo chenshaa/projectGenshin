@@ -34,7 +34,7 @@ export default class packingPests extends Component {
 
     static _instance: packingPests;
 
-    private waitForInput:number=null;
+    private waitForInput: number = null;
 
     start() {
         // [3]
@@ -55,30 +55,35 @@ export default class packingPests extends Component {
     systemClickLeft() {
         //console.log(this.handsAnim);
         this.handsAnim.play('handsAccept');
-        if(this.waitForInput!=null){
+        if (this.waitForInput != null) {
             //存在等待按键
+            console.log("clicked");
             clearTimeout(this.waitForInput);
-            this.waitForInput=null;
+            this.waitForInput = null;
             this.goodsAnim.play("fishAccept");
         }
-    }  
+    }
 
     sysEmit(type: number, inf?: number) {
         switch (type) {
             case 1:
                 this.goodsAnim.play("fishDefault");
-                setTimeout(this.judiceInput,inf);
+                setTimeout(() => { this.judiceInput() }, inf);
                 break;
         }
     }
 
-    judiceInput(){
-        this.waitForInput=setTimeout(()=>{
+    judiceInput() {
+        this.waitForInput = setTimeout(() => {
+            this.goodsAnim.play("fishMiss");
             console.log("miss");
-        },50);
+            this.waitForInput = null;
+        }, 200);
     }
 
-    
+
+
+
     // update (deltaTime: number) {
     //     // [4]
     // }

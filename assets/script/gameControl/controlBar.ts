@@ -1,5 +1,5 @@
 import packingPests from './packingPests';
-import { _decorator, Component, Node, game, director, EventTouch, EventKeyboard, input, Input, Script, Scene } from 'cc';
+import { _decorator, Component, Node, game, director, EventTouch, EventKeyboard, input, Input, Script, Scene, AudioSource } from 'cc';
 const { ccclass, property } = _decorator;
 
 /**
@@ -30,7 +30,7 @@ export class controlBar extends Component {
     private inputType: number = 0;
 
     //系统计时器
-    public systemTime:number =0;
+    public systemTime: number = 0;
 
     start() {
         //设置顶层节点
@@ -55,11 +55,28 @@ export class controlBar extends Component {
 
     gamrDirector() {
 
-        director.loadScene("packingPests");
+        //开始播放
+        this.node.getComponent(AudioSource).play();
 
-        setTimeout(()=>{
-            packingPests.ins.sysEmit(1,20);
-        },6600);
+        //场景1：packingPests
+        director.loadScene("packingPests");
+        this.systemTime = new Date().getTime();
+
+        setTimeout(() => {
+            packingPests.ins.sysEmit(1, 100);
+        }, 6590);
+
+        setTimeout(() => {
+            packingPests.ins.sysEmit(1, 100);
+        }, 7300);
+
+        setTimeout(() => {
+            packingPests.ins.sysEmit(1, 100);
+        }, 8021);
+
+        setTimeout(() => {
+            packingPests.ins.sysEmit(1, 100);
+        }, 8701);
 
     }
 
@@ -128,10 +145,9 @@ export class controlBar extends Component {
     }
 
     inputLeft() {
-        console.log("left");
-        //this.node.emit('systemClickLeft');
+        console.log(new Date().getTime() - this.systemTime);
+        //console.log("left");
         packingPests.ins.systemClickLeft();
-        //getComponent('packingPests');
     }
 
     inputRight() {
