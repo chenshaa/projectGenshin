@@ -1,5 +1,5 @@
 import packingPests from './packingPests';
-import { _decorator, Component, Node, game, director, EventTouch, EventKeyboard, input, Input, Script, Scene, AudioSource } from 'cc';
+import { _decorator, Component, Node, game, director, EventTouch, EventKeyboard, input, Input, Script, Scene, AudioSource, loader, assetManager, JsonAsset } from 'cc';
 const { ccclass, property } = _decorator;
 
 /**
@@ -32,6 +32,11 @@ export class controlBar extends Component {
     //系统计时器
     public systemTime: number = 0;
 
+    //存放内存中铺面
+    private packingPestsMap: object = null;
+
+    //全局设置
+    private systemSetting: object = null;
     start() {
         //设置顶层节点
         game.addPersistRootNode(this.node);
@@ -49,51 +54,81 @@ export class controlBar extends Component {
         input.on(Input.EventType.KEY_DOWN, this.keyInputStart, this);
         input.on(Input.EventType.KEY_UP, this.keyInputEnd, this);
 
-        //开始游戏
-        this.gamrDirector();
+        //铺面读入内存
+        let mapList = [{ uuid: '67HNmUYn1K7LbqhgAd9KqA' },
+        { uuid: 'e5EcJk3TRHBoBzo8X0PO2q' }];
+
+        assetManager.loadAny(mapList, (err, assets) => {
+            this.systemSetting = assets[0].json;
+            this.packingPestsMap = assets[1].json;
+
+            //开始游戏
+            this.gamrDirector();
+        });
+
     }
 
     gamrDirector() {
-
         //开始播放
         this.node.getComponent(AudioSource).play();
 
         //场景1：packingPests
         director.loadScene("packingPests");
-        this.systemTime = new Date().getTime();
 
-        setTimeout(() => {
-            packingPests.ins.sysEmit(1, 100);
-        }, 6590);
-
-        setTimeout(() => {
-            packingPests.ins.sysEmit(1, 100);
-        }, 7300);
-
-        setTimeout(() => {
-            packingPests.ins.sysEmit(1, 100);
-        }, 8021);
-
-        setTimeout(() => {
-            packingPests.ins.sysEmit(1, 100);
-        }, 8701);
+        //@ts-ignore
+        let localOffset = this.packingPestsMap.localOffset;
+        //@ts-ignore
+        for (let data of this.packingPestsMap.data) {
+            setTimeout(() => {
+                packingPests.ins.sysEmit(data.type, 100);
+                //@ts-ignore
+            }, data.time - localOffset + this.systemSetting.inputDelay);
+        }
 
     }
 
     leftTouchPanelStart(e: EventTouch) {
-        console.log("touch");
+        if (this.inputType == 0) {
+            this.inputType = 1;
+            setTimeout(() => {
+                if (this.inputType == 1) {
+                    //没有伴随按键
+                    this.inputType = 0;
+                    this.inputLeft();
+                }
+            }, this.inputDely);
+
+        } else if (this.inputType == 2) {
+            //存在right伴随
+            this.inputType = 3;
+            this.inputDoubleStart();
+        }
     }
 
     leftTouchPanelEnd(e: EventTouch) {
-
+        this.keyInputEnd();
     }
 
     rightTouchPanelStart(e: EventTouch) {
+        if (this.inputType == 0) {
+            this.inputType = 2;
+            setTimeout(() => {
+                if (this.inputType == 2) {
+                    //没有伴随按键
+                    this.inputType = 0;
+                    this.inputRight();
+                }
+            }, this.inputDely);
 
+        } else if (this.inputType == 1) {
+            //存在left伴随
+            this.inputType = 3;
+            this.inputDoubleStart();
+        }
     }
 
     rightTouchPanelEnd(e: EventTouch) {
-
+        this.keyInputEnd();
     }
 
     keyInputStart(e: EventKeyboard) {
@@ -137,7 +172,7 @@ export class controlBar extends Component {
         }
     }
 
-    keyInputEnd(e: EventKeyboard) {
+    keyInputEnd(e?: EventKeyboard) {
         if (this.inputType == 3) {
             this.inputType = 0;
             this.inputDoubleEnd();
@@ -145,21 +180,20 @@ export class controlBar extends Component {
     }
 
     inputLeft() {
-        console.log(new Date().getTime() - this.systemTime);
-        //console.log("left");
         packingPests.ins.systemClickLeft();
     }
 
     inputRight() {
-        console.log("righr");
+        //console.log("righr");
     }
 
     inputDoubleStart() {
-        console.log("double");
+        //console.log("double");
+        packingPests.ins.systemClickDouble();
     }
 
     inputDoubleEnd() {
-        console.log("doubleEnd");
+        //console.log("doubleEnd");
     }
 
 

@@ -1,0 +1,90 @@
+{
+    "localOffset": 280,
+    "data": [
+        {
+            "type": 0,
+            "time": 3664,
+            "inf": 0
+        },
+        {
+            "type": 1,
+            "time": 6921,
+            "inf": 0
+        },
+        {
+            "type": 2,
+            "time": 7641,
+            "inf": 0
+        },
+        {
+            "type": 1,
+            "time": 8375,
+            "inf": 0
+        },
+        {
+            "type": 2,
+            "time": 9089,
+            "inf": 0
+        },
+        {
+            "type": 1,
+            "time": 9813,
+            "inf": 0
+        },
+        {
+            "type": 2,
+            "time": 10543,
+            "inf": 0
+        },
+        {
+            "type": 1,
+            "time": 11279,
+            "inf": 0
+        },
+        {
+            "type": 2,
+            "time": 11472,
+            "inf": 0
+        },
+        {
+            "type": 2,
+            "time": 11839,
+            "inf": 0
+        },
+        {
+            "type": 1,
+            "time": 12708,
+            "inf": 0
+        },
+        {
+            "type": 2,
+            "time": 13447,
+            "inf": 0
+        },
+        {
+            "type": 1,
+            "time": 14167,
+            "inf": 0
+        },
+        {
+            "type": 2,
+            "time": 14877,
+            "inf": 0
+        },
+        {
+            "type": 1,
+            "time": 15606,
+            "inf": 0
+        },
+        {
+            "type": 2,
+            "time": 16324,
+            "inf": 0
+        },
+        {
+            "type": 1,
+            "time": 17050,
+            "inf": 0
+        }
+    ]
+}

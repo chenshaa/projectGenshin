@@ -35,6 +35,8 @@ export default class packingPests extends Component {
     static _instance: packingPests;
 
     private waitForInput: number = null;
+    //投掷物种类，false为fish，true为wine
+    private goodsType: boolean = false;
 
     start() {
         // [3]
@@ -53,21 +55,49 @@ export default class packingPests extends Component {
     }
 
     systemClickLeft() {
-        //console.log(this.handsAnim);
+        this.handsAnim.play('handsRefuse');
+        if (this.waitForInput != null) {
+            //存在等待按键
+            clearTimeout(this.waitForInput);
+            this.waitForInput = null;
+            if (this.goodsType) {
+                this.goodsAnim.play("wineRefuse");
+            } else {
+                this.goodsAnim.play("fishRefuse");
+            }
+        }
+    }
+
+    systemClickDouble() {
         this.handsAnim.play('handsAccept');
         if (this.waitForInput != null) {
             //存在等待按键
-            console.log("clicked");
             clearTimeout(this.waitForInput);
             this.waitForInput = null;
-            this.goodsAnim.play("fishAccept");
+            if (this.goodsType) {
+                this.goodsAnim.play("wineAccept");
+            } else {
+                this.goodsAnim.play("fishAccept");
+            }
         }
     }
 
     sysEmit(type: number, inf?: number) {
+        console.log('begin');
         switch (type) {
+            case 0:
+                this.handsAnim.play("handsBegin");
+                break;
             case 1:
+                this.goodsType = false;
+                this.goodsAnim.stop();
                 this.goodsAnim.play("fishDefault");
+                setTimeout(() => { this.judiceInput() }, inf);
+                break;
+            case 2:
+                this.goodsType = true;
+                this.goodsAnim.stop();
+                this.goodsAnim.play("wineDefault");
                 setTimeout(() => { this.judiceInput() }, inf);
                 break;
         }
@@ -75,10 +105,14 @@ export default class packingPests extends Component {
 
     judiceInput() {
         this.waitForInput = setTimeout(() => {
-            this.goodsAnim.play("fishMiss");
+            if (this.goodsType) {
+                this.goodsAnim.play("wineMiss");
+            } else {
+                this.goodsAnim.play("fishMiss");
+            }
             console.log("miss");
             this.waitForInput = null;
-        }, 200);
+        }, 100);
     }
 
 

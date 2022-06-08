@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.AnimationClip",
-    "_name": "fishRefuse",
+    "_name": "wineRefuse",
     "_objFlags": 0,
     "_native": "",
     "sample": 50,
@@ -61,7 +61,7 @@
     "__type__": "cc.RealCurve",
     "_times": [
       0,
-      0.08
+      0.07999999821186066
     ],
     "_values": [
       {
@@ -100,7 +100,7 @@
     "__type__": "cc.RealCurve",
     "_times": [
       0,
-      0.08
+      0.07999999821186066
     ],
     "_values": [
       {
@@ -139,7 +139,7 @@
     "__type__": "cc.RealCurve",
     "_times": [
       0,
-      0.08
+      0.07999999821186066
     ],
     "_values": [
       {
@@ -219,7 +219,7 @@
     ],
     "_values": [
       {
-        "__uuid__": "d2cac8b6-77f8-4fa3-854e-bc0f35341f07@f9941",
+        "__uuid__": "df1ea8e9-bee2-40b8-9847-6d701eaea627@f9941",
         "__expectedType__": "cc.SpriteFrame"
       }
     ]
