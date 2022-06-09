@@ -80,7 +80,7 @@ export class controlBar extends Component {
         //@ts-ignore
         for (let data of this.packingPestsMap.data) {
             setTimeout(() => {
-                packingPests.ins.sysEmit(data.type, 100);
+                packingPests.ins.sysEmit(data.type, 400);
                 //@ts-ignore
             }, data.time - localOffset + this.systemSetting.inputDelay);
         }

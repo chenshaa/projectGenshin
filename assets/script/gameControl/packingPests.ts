@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Animation, director } from 'cc';
+import { _decorator, Component, Node, Animation, director, AudioClip, AudioSource } from 'cc';
 const { ccclass, property } = _decorator;
 
 /**
@@ -29,8 +29,21 @@ export default class packingPests extends Component {
     @property(Node)
     goodsNode: Node = null;
 
+    @property(AudioClip)
+    soundsFish: AudioClip = null;
+
+    @property(AudioClip)
+    soundsWine: AudioClip = null;
+
+    @property(AudioClip)
+    soundsAccept: AudioClip = null;
+
+    @property(AudioClip)
+    soundsRefuse: AudioClip = null;
+
     private handsAnim: Animation = null;
     private goodsAnim: Animation = null;
+    private soundsComponent: AudioSource = null;
 
     static _instance: packingPests;
 
@@ -38,12 +51,15 @@ export default class packingPests extends Component {
     //投掷物种类，false为fish，true为wine
     private goodsType: boolean = false;
 
+    private num: number = 0;
+
     start() {
         // [3]
         packingPests._instance = this;
 
         this.handsAnim = this.handsNode.getComponent(Animation);
         this.goodsAnim = this.goodsNode.getComponent(Animation);
+        this.soundsComponent = this.node.getComponent(AudioSource);
     }
 
     /**
@@ -62,9 +78,11 @@ export default class packingPests extends Component {
             this.waitForInput = null;
             if (this.goodsType) {
                 this.goodsAnim.play("wineRefuse");
+                console.log("分数：" + ++this.num);
             } else {
                 this.goodsAnim.play("fishRefuse");
             }
+            this.soundsComponent.playOneShot(this.soundsRefuse);
         }
     }
 
@@ -78,12 +96,13 @@ export default class packingPests extends Component {
                 this.goodsAnim.play("wineAccept");
             } else {
                 this.goodsAnim.play("fishAccept");
+                console.log("分数：" + ++this.num);
             }
+            this.soundsComponent.playOneShot(this.soundsAccept);
         }
     }
 
     sysEmit(type: number, inf?: number) {
-        console.log('begin');
         switch (type) {
             case 0:
                 this.handsAnim.play("handsBegin");
@@ -92,12 +111,14 @@ export default class packingPests extends Component {
                 this.goodsType = false;
                 this.goodsAnim.stop();
                 this.goodsAnim.play("fishDefault");
+                this.soundsComponent.playOneShot(this.soundsFish, 2);
                 setTimeout(() => { this.judiceInput() }, inf);
                 break;
             case 2:
                 this.goodsType = true;
                 this.goodsAnim.stop();
                 this.goodsAnim.play("wineDefault");
+                this.soundsComponent.playOneShot(this.soundsWine, 2);
                 setTimeout(() => { this.judiceInput() }, inf);
                 break;
         }
@@ -112,7 +133,7 @@ export default class packingPests extends Component {
             }
             console.log("miss");
             this.waitForInput = null;
-        }, 100);
+        }, 200);
     }
 
 
